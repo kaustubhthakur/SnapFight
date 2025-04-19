@@ -4,7 +4,7 @@ const PostSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-     description: {
+    description: {
         type: String,
         required: true,
     },
@@ -17,7 +17,7 @@ const PostSchema = new mongoose.Schema({
         of: [String],
         default: new Map()
     },
-   
+
 }, {
     timestamps: true,
 })
