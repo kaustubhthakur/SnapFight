@@ -7,6 +7,8 @@ const mongoose = require('mongoose')
 require('dotenv').config();
 const authrouter = require('./routes/auth')
 const userrouter = require('./routes/users')
+const postrouter = require('./routes/posts')
+const snaprouter = require('./routes/snap')
 app.use(express.json())
 app.use(cors())
 app.use(cookieparser());
@@ -20,8 +22,10 @@ const connection = async()=>{
     }
 }
 connection();
-app.use('/auth',authrouter)
-app.use('/users',userrouter)
+app.use('/auth',authrouter);
+app.use('/users',userrouter);
+app.use('/posts',postrouter);
+app.use('/snaps',snaprouter);
 app.listen(port,() =>{
     console.log(`server is running on port ${port}...`)
 })
