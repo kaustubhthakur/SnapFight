@@ -1,4 +1,5 @@
 const Post = require('../models/Post')
+const Snap = require('../models/Snap')
 const createpost = async(req,res) =>{
     try {
         const newpost = new Post(req.params);
@@ -28,6 +29,13 @@ const deletepost = async(req,res)=>{
     try {
         await Post.findByIdAndDelete(req.params.id);
         res.status(201).json({message:"post has been deleted..."})
+    } catch (error) {
+        console.error(error);
+    }
+}
+const likepost = async(req,res)=>{
+    try {
+        
     } catch (error) {
         console.error(error);
     }

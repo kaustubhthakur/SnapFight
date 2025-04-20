@@ -16,17 +16,23 @@ const createSnap = async (req, res) => {
 
         const savedSnap = await newsnap.save();
         try {
-            await Event.findByIdAndUpdate(postId, {
+            await Post.findByIdAndUpdate(postId, {
                 $push: { snaps: savedSnap._id },
             });
         } catch (err) {
-            next(err);
+           console.log(err)
         }
-
-
-
+        res.status(201).json(savedSnap);
     } catch (error) {
         console.error(error);
     }
 }
-module.exports = { createSnap };
+const getsnaps = async(req,res)=>{
+    try {
+        const snaps = await Snap.findById(req.params.id);
+        res.status(201).json(snaps);
+    } catch (error) {
+        console.error(error);
+    }
+}
+module.exports = { createSnap ,getsnaps};
