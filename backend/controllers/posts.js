@@ -2,7 +2,7 @@ const Post = require('../models/Post')
 const Snap = require('../models/Snap')
 const createpost = async(req,res) =>{
     try {
-        const newpost = new Post(req.params);
+        const newpost = new Post(req.body);
         const savepost = await newpost.save();
         res.status(201).json(savepost)
     } catch (error) {
