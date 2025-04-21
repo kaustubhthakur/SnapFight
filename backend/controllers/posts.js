@@ -33,11 +33,65 @@ const deletepost = async(req,res)=>{
         console.error(error);
     }
 }
-const likepost = async(req,res)=>{
+const likeSnap = async (req, res) => {
     try {
+        const snapId = req.params.sid;
+        const userId = req.body.userId;
+        const postId = req.body.id; // Assuming you send the post ID this snap belongs to
         
+        // Find the snap by ID
+        const snap = await Snap.findById(snapId);
+        
+        if (!snap) {
+            return res.status(404).json({ message: "Snap not found" });
+        }
+        
+        // Find the post if postId is provided
+        if (postId) {
+            const post = await Post.findById(postId);
+            if (!post) {
+                return res.status(404).json({ message: "Post not found" });
+            }
+            
+            // Make sure this snap is associated with the post
+            if (!post.snaps.includes(snapId)) {
+                return res.status(400).json({ message: "This snap does not belong to the specified post" });
+            }
+        }
+        
+        // Check if user has already voted for this snap
+        if (!snap.votes.includes(userId)) {
+            // Like the snap - add user ID to votes array
+            await Snap.updateOne(
+                { _id: snapId }, 
+                { $push: { votes: userId } }
+            );
+            
+            res.status(200).json({ 
+                message: "Snap has been liked",
+                success: true,
+                snap: await Snap.findById(snapId) // Return updated snap
+            });
+        } else {
+            // Unlike the snap - remove user ID from votes array
+            await Snap.updateOne(
+                { _id: snapId }, 
+                { $pull: { votes: userId } }
+            );
+            
+            res.status(200).json({ 
+                message: "Snap has been unliked",
+                success: true,
+                snap: await Snap.findById(snapId) // Return updated snap
+            });
+        }
     } catch (error) {
         console.error(error);
+        res.status(500).json({ 
+            message: "Server error", 
+            success: false,
+            error: error.message
+        });
     }
-}
-module.exports = {createpost,deletepost,getpost,getposts}
+};
+module.exports = {createpost,deletepost,getpost,getposts,likeSnap}

@@ -7,10 +7,10 @@ const createSnap = async (req, res) => {
         const postId = req.params.id;
         const { image } = req.body;
 
-        if (image) {
-            const uploadedResponse = await cloudinary.uploader.upload(image);
-            image = uploadedResponse.secure_url;
-        }
+        // if (image) {
+        //     const uploadedResponse = await cloudinary.uploader.upload(image);
+        //     image = uploadedResponse.secure_url;
+        // }
         const newsnap = new Snap({ image });
 
 
@@ -27,12 +27,12 @@ const createSnap = async (req, res) => {
         console.error(error);
     }
 }
-const getsnaps = async(req,res)=>{
+const getsnap = async(req,res)=>{
     try {
-        const snaps = await Snap.findById(req.params.id);
-        res.status(201).json(snaps);
+        const snap = await Snap.findById(req.params.id);
+        res.status(201).json(snap);
     } catch (error) {
         console.error(error);
     }
 }
-module.exports = { createSnap ,getsnaps};
+module.exports = { createSnap ,getsnap};
