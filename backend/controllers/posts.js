@@ -37,9 +37,9 @@ const likeSnap = async (req, res) => {
     try {
         const snapId = req.params.sid;
         const userId = req.body.userId;
-        const postId = req.body.id; // Assuming you send the post ID this snap belongs to
+        const postId = req.body.id; 
         
-        // Find the snap by ID
+        
         const snap = await Snap.findById(snapId);
         
         if (!snap) {
