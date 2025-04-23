@@ -6,5 +6,5 @@ router.get('/:id',protectRoute,getpost)
 router.get('/',getposts)
 router.delete('/:id',protectRoute,deletepost)
 router.post('/',protectRoute,createpost)
-router.put('/:id/:sid',protectRoute,likeSnap)
+router.put('/:id/:sid/vote',protectRoute,likeSnap)
 module.exports = router;

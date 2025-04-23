@@ -36,7 +36,7 @@ const deletepost = async(req,res)=>{
 const likeSnap = async (req, res) => {
     try {
         const snapId = req.params.sid;
-        const userId = req.body.userId;
+        const userId = req.user._id;
         const postId = req.body.id; 
         
         
@@ -45,8 +45,7 @@ const likeSnap = async (req, res) => {
         if (!snap) {
             return res.status(404).json({ message: "Snap not found" });
         }
-        
-        // Find the post if postId is provided
+    
         if (postId) {
             const post = await Post.findById(postId);
             if (!post) {
@@ -59,7 +58,7 @@ const likeSnap = async (req, res) => {
             }
         }
         
-        // Check if user has already voted for this snap
+
         if (!snap.votes.includes(userId)) {
             // Like the snap - add user ID to votes array
             await Snap.updateOne(
