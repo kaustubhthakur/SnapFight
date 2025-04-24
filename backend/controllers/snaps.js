@@ -7,10 +7,10 @@ const createSnap = async (req, res) => {
         const postId = req.params.id;
         const { image } = req.body;
 
-        // if (image) {
-        //     const uploadedResponse = await cloudinary.uploader.upload(image);
-        //     image = uploadedResponse.secure_url;
-        // }
+        if (image) {
+            const uploadedResponse = await cloudinary.uploader.upload(image);
+            image = uploadedResponse.secure_url;
+        }
         const newsnap = new Snap({ image });
 
 
