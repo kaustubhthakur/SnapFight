@@ -11,15 +11,15 @@ const postrouter = require('./routes/posts')
 const snaprouter = require('./routes/snap')
 const cloudinary = require('cloudinary')
 cloudinary.config({
-	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-	api_key: process.env.CLOUDINARY_API_KEY,
-	api_secret: process.env.CLOUDINARY_API_SECRET,
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 app.use(express.json())
-app.use(cors())
+app.use(cors());
 app.use(cookieparser());
 
-const connection = async()=>{
+const connection = async () => {
     try {
         await mongoose.connect(process.env.MONGODB);
         console.log('db is connected...')
@@ -28,10 +28,10 @@ const connection = async()=>{
     }
 }
 connection();
-app.use('/auth',authrouter);
-app.use('/users',userrouter);
-app.use('/posts',postrouter);
-app.use('/snaps',snaprouter);
-app.listen(port,() =>{
+app.use('/auth', authrouter);
+app.use('/users', userrouter);
+app.use('/posts', postrouter);
+app.use('/snaps', snaprouter);
+app.listen(port, () => {
     console.log(`server is running on port ${port}...`)
 })
