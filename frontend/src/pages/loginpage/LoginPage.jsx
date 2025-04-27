@@ -1,117 +1,78 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from "react-router-dom";
-import './LoginPage.css';
+import React, { useState, useContext } from 'react'
+import { Link } from 'react-router-dom'
+import { UserDataContext } from '../../context/UserContext'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const LoginPage = () => {
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    username: '',
-    password: ''
-  });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [userData, setUserData] = useState({})
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
+  const { user, setUser } = useContext(UserDataContext)
+  const navigate = useNavigate()
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    
-    try {
-      // Replace with your actual API endpoint
-      const response = await fetch('http://localhost:9000/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
-      }
-      
-      // Store the token in localStorage
-      localStorage.setItem('token', data.token);
-      
-      // You might also want to store additional user info if available
-      if (data.user) {
-        localStorage.setItem('user', JSON.stringify(data.user));
-      }
-      
-      alert('Logged in successfully');
-      
-      // Redirect to dashboard or home
-      navigate('/');
-    } catch (err) {
-      setError(err.message || 'An error occurred during login');
-    } finally {
-      setLoading(false);
+  const submitHandler = async (e) => {
+    e.preventDefault()
+
+    const userData = {
+      username: username,
+      password: password
     }
-  };
+
+    const response = await axios.post('https://localhost:9000/auth/login', userData)
+
+    if (response.status === 200) {
+      const data = response.data
+      setUser(data.user)
+      localStorage.setItem('token', data.token)
+      alert(`user is logged in ${data.user.username}`)
+      navigate('/')
+    }
+
+    setUsername('')
+    setPassword('')
+  }
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <h1 className="login-title">Sign In</h1>
-        
-        {error && <div className="error-message">{error}</div>}
-        
-        <form onSubmit={handleSubmit} className="login-form">
-          <div className="form-group">
-            <label htmlFor="username">Username</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              required
-              placeholder="Enter your username"
-            />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              placeholder="Enter your password"
-            />
-          </div>
-          
-          <button 
-            type="submit" 
-            className="login-button"
-            disabled={loading}
-          >
-            {loading ? 'Signing in...' : 'Sign In'}
-          </button>
+    <div className='p-7 h-screen flex items-center justify-center'>
+      <div className='w-full max-w-md'>
+      
+        <form onSubmit={submitHandler}>
+          <h3 className='text-lg font-medium mb-2'>What's your username</h3>
+          <input
+            required
+            value={username}
+            onChange={(e) => {
+              setUsername(e.target.value)
+            }}
+            className='bg-[#eeeeee] mb-7 rounded-lg px-4 py-2 border w-full text-lg placeholder:text-base'
+            type="text"
+            placeholder='Enter your username'
+          />
+
+          <h3 className='text-lg font-medium mb-2'>Enter Password</h3>
+
+          <input
+            className='bg-[#eeeeee] mb-7 rounded-lg px-4 py-2 border w-full text-lg placeholder:text-base'
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value)
+            }}
+            required 
+            type="password"
+            placeholder='password'
+          />
+
+          <button
+            className='bg-[#111] text-white font-semibold mb-3 rounded-lg px-4 py-2 w-full text-lg'
+          >Login</button>
+
         </form>
-        
-        <div className="register-link">
-          Don't have an account? <a href="/register">Register</a>
-        </div>
-        
-        <div className="forgot-password">
-          <a href="/forgot-password">Forgot password?</a>
-        </div>
+        <p className='text-center'>New here? <Link to='/signup' className='text-blue-600'>Create new Account</Link></p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LoginPage;
+export default LoginPage

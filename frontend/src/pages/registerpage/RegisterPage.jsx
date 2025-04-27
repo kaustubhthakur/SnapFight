@@ -1,118 +1,101 @@
-import React, { useState } from 'react';
-import './RegisterPage.css';
+import React, { useState, useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { UserDataContext } from '../../context/UserContext'
 
 const RegisterPage = () => {
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-  });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [userData, setUserData] = useState({})
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  const navigate = useNavigate()
+  const { user, setUser } = useContext(UserDataContext)
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    
-    try {
-      // Replace with your actual API endpoint
-      const response = await fetch('http://localhost:9000/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.message || 'Registration failed');
-      }
-      alert('registerd...')
-      setSuccess('Registration successful');
-      setFormData({ username: '', email: '', password: '' });
-    } catch (err) {
-      setError(err.message || 'An error occurred during registration');
-    } finally {
-      setLoading(false);
+  const submitHandler = async (e) => {
+    e.preventDefault()
+
+    const newUser = {
+      username: username,
+      email: email,
+      password: password
     }
-  };
+
+    const response = await axios.post("https://localhost:9000/auth/register", newUser)
+
+    if (response.status === 201) {
+      const data = response.data
+      setUser(data.user)
+      alert('regsitered')
+      localStorage.setItem('token', data.token)
+      navigate('/')
+    }
+
+    setUsername('')
+    setEmail('')
+    setPassword('')
+  }
 
   return (
-    <div className="register-container">
-      <div className="register-card">
-        <h1 className="register-title">Create Account</h1>
-        
-        {error && <div className="error-message">{error}</div>}
-        {success && <div className="success-message">{success}</div>}
-        
-        <form onSubmit={handleSubmit} className="register-form">
-          <div className="form-group">
-            <label htmlFor="username">Username</label>
+    <div>
+      <div className='p-7 h-screen flex flex-col justify-between'>
+        <div>
+         
+          <form onSubmit={submitHandler}>
+            <h3 className='text-lg font-medium mb-2'>Choose a username</h3>
             <input
+              required
+              value={username}
+              onChange={(e) => {
+                setUsername(e.target.value)
+              }}
+              className='bg-[#eeeeee] mb-7 rounded-lg px-4 py-2 border w-full text-lg placeholder:text-base'
               type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              required
-              placeholder="Choose a username"
+              placeholder='Username'
             />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
+
+            <h3 className='text-lg font-medium mb-2'>What's your email</h3>
             <input
+              required
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value)
+              }}
+              className='bg-[#eeeeee] mb-7 rounded-lg px-4 py-2 border w-full text-lg placeholder:text-base'
               type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              placeholder="Your email address"
+              placeholder='email@example.com'
             />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
+
+            <h3 className='text-lg font-medium mb-2'>Enter Password</h3>
             <input
+              className='bg-[#eeeeee] mb-7 rounded-lg px-4 py-2 border w-full text-lg placeholder:text-base'
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value)
+              }}
+              required 
               type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              placeholder="Create a password"
-              minLength="8"
+              placeholder='password'
             />
-          </div>
-          
-          <button 
-            type="submit" 
-            className="register-button"
-            disabled={loading}
-          >
-            {loading ? 'Registering...' : 'Register'}
-          </button>
-        </form>
-        
-        <div className="login-link">
-          Already have an account? <a href="/login">Log in</a>
+
+            <button
+              className='bg-[#111] text-white font-semibold mb-3 rounded-lg px-4 py-2 w-full text-lg'
+            >Create account</button>
+
+          </form>
+          <p className='text-center'>Already have an account? <Link to='/login' className='text-blue-600'>Login here</Link></p>
+        </div>
+
+        <div>
+          <p className='text-[10px] leading-tight'>
+            This site is protected by reCAPTCHA and the 
+            <span className='underline'> Google Privacy Policy</span> and 
+            <span className='underline'> Terms of Service apply</span>.
+          </p>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default RegisterPage;
+export default RegisterPage

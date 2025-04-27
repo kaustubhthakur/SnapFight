@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-const cookieparser = require('cookie-parser')
+const cookieParser = require('cookie-parser')
 const app = express();
 const port = 9000;
 const mongoose = require('mongoose')
@@ -15,9 +15,10 @@ cloudinary.config({
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-app.use(express.json())
 app.use(cors());
-app.use(cookieparser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 const connection = async () => {
     try {
