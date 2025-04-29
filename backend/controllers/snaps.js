@@ -1,6 +1,6 @@
 const Post = require('../models/Post')
 const Snap = require('../models/Snap');
-const { cloudinary } = require('cloudinary')
+const  cloudinary  = require('../utils/cloudinary')
 const createSnap = async (req, res) => {
     try {
 
