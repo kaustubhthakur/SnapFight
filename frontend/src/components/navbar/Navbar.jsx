@@ -1,47 +1,77 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
+import axios from 'axios';
 import './Navbar.css';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+    const checkAuth = () => {
+      const token = localStorage.getItem('user');
+      const storedUsername = localStorage.getItem('username');
+      setIsLoggedIn(!!token);
+      setUsername(storedUsername || '');
     };
 
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+
+    checkAuth();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  const handleLogout = async () => {
+    try {
+      await axios.post('http://localhost:9000/auth/logout', null, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('user')}`
+        }
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      localStorage.removeItem('user');
+      localStorage.removeItem('username');
+      setIsLoggedIn(false);
+      setUsername('');
+      window.location.href = '/login';
+    }
   };
 
   return (
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="navbar-container">
         <div className="logo">
-          <Link to="/">
-          S.F.
-          </Link>
+          <Link to="/">S.F.</Link>
         </div>
 
-        {/* Hamburger Menu Icon */}
         <div className="hamburger" onClick={toggleMenu}>
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </div>
 
-        {/* Auth Links */}
         <div className={`auth-buttons ${isMenuOpen ? 'active' : ''}`}>
-          <Link to="/login" className="login-link">Login</Link>
-          <Link to="/register" className="register-link">Register</Link>
+          {isLoggedIn ? (
+            <>
+              <span className="username">Welcome, {username}</span>
+              <button className="logout-button" onClick={handleLogout}>
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="login-link">Login</Link>
+              <Link to="/register" className="register-link">Register</Link>
+            </>
+          )}
         </div>
       </div>
     </nav>
