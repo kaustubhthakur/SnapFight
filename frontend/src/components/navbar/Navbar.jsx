@@ -4,6 +4,7 @@ import { Menu, X } from 'lucide-react';
 import axios from 'axios';
 import './Navbar.css';
 
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
