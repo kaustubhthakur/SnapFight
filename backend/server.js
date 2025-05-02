@@ -4,15 +4,24 @@ const cookieParser = require('cookie-parser')
 const app = express();
 const port = 9000;
 const mongoose = require('mongoose')
+const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 const authrouter = require('./routes/auth')
 const userrouter = require('./routes/users')
 const postrouter = require('./routes/posts')
 const snaprouter = require('./routes/snap')
-
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, 
+    max: 100,
+    message: "Too many requests from this IP, please try again after 15 minutes",
+  });
+  
+app.use(limiter)
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+
+
 
 const connection = async () => {
     try {
