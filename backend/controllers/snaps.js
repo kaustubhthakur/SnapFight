@@ -1,17 +1,18 @@
 const Post = require('../models/Post')
 const Snap = require('../models/Snap');
-const  cloudinary  = require('../utils/cloudinary')
+const cloudinary = require('../utils/cloudinary')
 const createSnap = async (req, res) => {
     try {
 
         const postId = req.params.id;
         const { image } = req.body;
 
-        // if (image) {
-        //     const uploadedResponse = await cloudinary.uploader.upload(image);
-        //     image = uploadedResponse.secure_url;
-        // }
-        const newsnap = new Snap({ image });
+        if (!image) {
+            return res.status(400).json({ message: "Profile pic is required" });
+        }
+        const uploadResponse = await cloudinary.uploader.upload(image);
+        const dx = uploadResponse.secure_url
+        const newsnap = new Snap({ image: dx });
 
 
         const savedSnap = await newsnap.save();
