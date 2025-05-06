@@ -71,117 +71,100 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+    <div className="register-container">
+      <div className="register-inner">
+        <div className="header-section">
+          <h2 className="register-heading">
             Create your account
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="auth-text">
             Already have an account?{' '}
-            <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500">
+            <Link to="/login" className="auth-link">
               Sign in
             </Link>
           </p>
         </div>
         
         {success ? (
-          <div className="rounded-md bg-green-50 p-4">
-            <div className="flex">
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-green-800">Registration successful!</h3>
-                <div className="mt-2 text-sm text-green-700">
-                  <p>Your account has been created. You can now log in.</p>
-                </div>
-                <div className="mt-4">
-                  <Link
-                    to="/login"
-                    className="inline-flex rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-800 hover:bg-green-100"
-                  >
-                    Go to login
-                  </Link>
-                </div>
+          <div className="success-message">
+            <div className="message-content">
+              <h3>Registration successful!</h3>
+              <p>Your account has been created. You can now log in.</p>
+              <div className="link-container">
+                <Link to="/login" className="success-link">
+                  Go to login
+                </Link>
               </div>
             </div>
           </div>
         ) : (
-          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-            <div className="space-y-4 rounded-md shadow-sm">
+          <form className="register-form" onSubmit={handleSubmit}>
+            <div className="form-content">
               {error && (
-                <div className="rounded-md bg-red-50 p-4">
-                  <div className="flex">
-                    <div className="ml-3">
-                      <h3 className="text-sm font-medium text-red-800">Error</h3>
-                      <div className="mt-2 text-sm text-red-700">
-                        <p>{error}</p>
-                      </div>
-                    </div>
+                <div className="error-message">
+                  <div className="error-content">
+                    <h3>Error</h3>
+                    <p>{error}</p>
                   </div>
                 </div>
               )}
               
-              <div>
-                <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+              <div className="input-group">
+                <label htmlFor="username" className="form-label">
                   Username
                 </label>
-                <div className="mt-1">
-                  <input
-                    id="username"
-                    name="username"
-                    type="text"
-                    required
-                    value={formData.username}
-                    onChange={handleChange}
-                    className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
-                    placeholder="Username"
-                  />
-                </div>
+                <input
+                  id="username"
+                  name="username"
+                  type="text"
+                  required
+                  value={formData.username}
+                  onChange={handleChange}
+                  className="form-input"
+                  placeholder="Username"
+                />
               </div>
               
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <div className="input-group">
+                <label htmlFor="email" className="form-label">
                   Email address
                 </label>
-                <div className="mt-1">
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
-                    placeholder="Email address"
-                  />
-                </div>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="form-input"
+                  placeholder="Email address"
+                />
               </div>
               
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <div className="input-group">
+                <label htmlFor="password" className="form-label">
                   Password
                 </label>
-                <div className="mt-1">
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="new-password"
-                    required
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
-                    placeholder="Password"
-                  />
-                </div>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="new-password"
+                  required
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="form-input"
+                  placeholder="Password"
+                />
               </div>
             </div>
             
-            <div>
+            <div className="button-container">
               <button
                 type="submit"
                 disabled={loading}
-                className="group relative flex w-full justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                className="submit-button"
               >
                 {loading ? 'Registering...' : 'Register'}
               </button>
@@ -192,5 +175,4 @@ const RegisterPage = () => {
     </div>
   );
 };
-
-export default RegisterPage;
+export default RegisterPage
