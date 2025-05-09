@@ -1,70 +1,66 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import "./RegisterPage.css"
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import "./RegisterPage.css";
 const RegisterPage = () => {
-  // State for form fields
+
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: ''
+    username: "",
+    email: "",
+    password: "",
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  // Handle input changes
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
-  // Handle form submission
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    
-    // Basic validation
+    setError("");
+
     if (!formData.username || !formData.email || !formData.password) {
-      setError('All fields are required');
+      setError("All fields are required");
       return;
     }
-    
+
     try {
       setLoading(true);
+
       
-      // Call to backend API
-      const response = await fetch('http://localhost:9000/auth/register', {
-        method: 'POST',
+      const response = await fetch("http://localhost:9000/auth/register", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           username: formData.username,
           email: formData.email,
-          password: formData.password
+          password: formData.password,
         }),
       });
-      
+
       const data = await response.json();
-      
+
       if (!response.ok) {
-        throw new Error(data.message || 'Registration failed');
+        throw new Error(data.message || "Registration failed");
       }
-      
-      // Handle successful registration
-      alert('registerdd')
+      alert("registered...");
       setSuccess(true);
       setFormData({
-        username: '',
-        email: '',
-        password: ''
+        username: "",
+        email: "",
+        password: "",
       });
-      
     } catch (err) {
-      setError(err.message || 'An error occurred during registration');
+      setError(err.message || "An error occurred during registration");
     } finally {
       setLoading(false);
     }
@@ -74,17 +70,15 @@ const RegisterPage = () => {
     <div className="register-container">
       <div className="register-inner">
         <div className="header-section">
-          <h2 className="register-heading">
-            Create your account
-          </h2>
+          <h2 className="register-heading">Create your account</h2>
           <p className="auth-text">
-            Already have an account?{' '}
+            Already have an account?{" "}
             <Link to="/login" className="auth-link">
               Sign in
             </Link>
           </p>
         </div>
-        
+
         {success ? (
           <div className="success-message">
             <div className="message-content">
@@ -108,7 +102,7 @@ const RegisterPage = () => {
                   </div>
                 </div>
               )}
-              
+
               <div className="input-group">
                 <label htmlFor="username" className="form-label">
                   Username
@@ -124,7 +118,7 @@ const RegisterPage = () => {
                   placeholder="Username"
                 />
               </div>
-              
+
               <div className="input-group">
                 <label htmlFor="email" className="form-label">
                   Email address
@@ -141,7 +135,7 @@ const RegisterPage = () => {
                   placeholder="Email address"
                 />
               </div>
-              
+
               <div className="input-group">
                 <label htmlFor="password" className="form-label">
                   Password
@@ -159,14 +153,14 @@ const RegisterPage = () => {
                 />
               </div>
             </div>
-            
+
             <div className="button-container">
               <button
                 type="submit"
                 disabled={loading}
                 className="submit-button"
               >
-                {loading ? 'Registering...' : 'Register'}
+                {loading ? "Registering..." : "Register"}
               </button>
             </div>
           </form>
@@ -175,4 +169,4 @@ const RegisterPage = () => {
     </div>
   );
 };
-export default RegisterPage
+export default RegisterPage;
