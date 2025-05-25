@@ -1,51 +1,56 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { login } from '../store/slice/authSlice';
-import { useNavigate } from '@tanstack/react-router';
-import axios from 'axios';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { login } from "../../store/slice/authSlice";
+import { useNavigate } from "@tanstack/react-router";
+import axios from "axios";
 
 const RegisterPage = ({ state }) => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (password.length < 6) {
-      setError('Password must be at least 6 characters long');
+      setError("Password must be at least 6 characters long");
       return;
     }
 
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
-      const res = await axios.post('http://localhost:9000/auth/register', {
+      const res = await axios.post("http://localhost:9000/auth/register", {
         username,
         email,
         password,
       });
 
       dispatch(login(res.data.user));
-      navigate({ to: "/dashboard" });
+      navigate({ to: "/" });
       setLoading(false);
+      alert("registereddd");
     } catch (err) {
       setLoading(false);
       setError(
-        err.response?.data?.message || 'Registration failed. Please try again.'
+        err.response?.data?.message || "Registration failed. Please try again."
       );
     }
   };
 
   return (
     <div className="w-full max-w-md mx-auto">
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <h2 className="text-2xl font-bold text-center mb-6">Create an Account</h2>
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+      >
+        <h2 className="text-2xl font-bold text-center mb-6">
+          Create an Account
+        </h2>
 
         {error && (
           <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
@@ -54,7 +59,10 @@ const RegisterPage = ({ state }) => {
         )}
 
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="username"
+          >
             Full Name
           </label>
           <input
@@ -69,7 +77,10 @@ const RegisterPage = ({ state }) => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="email"
+          >
             Email
           </label>
           <input
@@ -84,7 +95,10 @@ const RegisterPage = ({ state }) => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="password"
+          >
             Password
           </label>
           <input
@@ -101,18 +115,23 @@ const RegisterPage = ({ state }) => {
 
         <div className="flex items-center justify-between">
           <button
-            className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full ${
+              loading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
             type="submit"
             disabled={loading}
           >
-            {loading ? 'Creating...' : 'Create Account'}
+            {loading ? "Creating..." : "Create Account"}
           </button>
         </div>
 
         <div className="text-center mt-4">
           <p className="cursor-pointer text-sm text-gray-600">
-            Already have an account?{' '}
-            <span onClick={() => state(true)} className="text-blue-500 hover:text-blue-700">
+            Already have an account?{" "}
+            <span
+              onClick={() => state(true)}
+              className="text-blue-500 hover:text-blue-700"
+            >
               Sign In
             </span>
           </p>
