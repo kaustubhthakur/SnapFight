@@ -17,7 +17,10 @@ const limiter = rateLimit({
   });
   
 app.use(limiter)
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173', // Your frontend URL (not wildcard *)
+    credentials: true
+}));
 app.use(express.json());
 app.use(cookieParser());
 
