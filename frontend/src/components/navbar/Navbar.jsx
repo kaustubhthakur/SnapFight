@@ -4,6 +4,7 @@ import { useUser } from '../../context/UserContextApi';
 import toast from 'react-hot-toast';
 import './Navbar.css';
 
+
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { user, updateUser } = useUser();
