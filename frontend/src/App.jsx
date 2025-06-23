@@ -5,7 +5,6 @@ import RegisterPage from "./pages/registerpage/RegisterPage";
 import LoginPage from "./pages/loginpage/LoginPage";
 import Profile from "./components/profile/Profile";
 import CreatePost from "./components/createpost/CreatePost";
-import Layout from "./Layout";
 const App = () => {
   return (
     <BrowserRouter>
@@ -13,7 +12,7 @@ const App = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={<Profile/>} />
         <Route path="/createpost" element={<CreatePost />} />
       </Routes>
     </BrowserRouter>
