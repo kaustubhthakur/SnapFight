@@ -11,14 +11,14 @@ const userrouter = require('./routes/users')
 const postrouter = require('./routes/posts')
 const snaprouter = require('./routes/snap')
 const limiter = rateLimit({
-    windowMs: 8 * 60 * 1000, 
+    windowMs: 8 * 60 * 1000,
     max: 100,
     message: "Too many requests from this IP, please try again after 8 minutes",
-  });
-  
+});
+
 app.use(limiter)
 app.use(cors({
-    origin: 'http://localhost:5173', // Your frontend URL (not wildcard *)
+    origin: 'http://localhost:5173',
     credentials: true
 }));
 app.use(express.json());
