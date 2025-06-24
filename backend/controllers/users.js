@@ -1,5 +1,6 @@
 const User = require('../models/User')
-const getUser = async(req,res)=>{
+const cloudinary = require('../utils/cloudinary')
+const getUser = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         res.status(201).json(user);
@@ -7,7 +8,7 @@ const getUser = async(req,res)=>{
         console.error(error);
     }
 }
-const getUsers = async(req,res)=>{
+const getUsers = async (req, res) => {
     try {
         const users = await User.find();
         res.status(201).json(users);
@@ -18,47 +19,52 @@ const getUsers = async(req,res)=>{
 
 const updateUser = async (req, res) => {
     try {
-      const { id } = req.params;
-      const { avatar, description } = req.body;
-      
+        const { id } = req.params;
+        const { avatar, description } = req.body;
 
-      const updatedUser = await User.findByIdAndUpdate(
-        id,
-        { avatar, description },
-        { new: true }
-      );
-      
-      if (!updatedUser) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-      
-      res.status(200).json(updatedUser);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error updating user', error: error.message });
-    }
-  };
-  const setProfile = async(req,res)=>{
-    try {
-        const userid = req.params.id;
-        const {avatar} = req.body;
-        const user = await User.findById(userid);
-        if(user)
-            {
-                res.status(201).json({message:"fucking bastard"});
-            }
-            user.avatar = avatar;
-            res.status(201).status({message:"avatar has been set bitch"});
+
+        const updatedUser = await User.findByIdAndUpdate(
+            id,
+            { avatar, description },
+            { new: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json(updatedUser);
     } catch (error) {
         console.error(error);
+        res.status(500).json({ message: 'Error updating user', error: error.message });
     }
-  }
-const deleteUser = async(req,res)=>{
+};
+const setProfile = async (req, res) => {
     try {
-        await User.findByIdAndDelete(req.params.id);
-        res.status(201).json({message:"user is deleted..."});
+        const userid = req.params.id;
+        const { avatar } = req.body;
+        const user = await User.findById(userid);
+        if (user) {
+            res.status(201).json({ message: "Nice" });
+        }
+        if (!avatar) {
+            res.status(201).json({ message: "avatar is not set" });
+
+        }
+        const uploadResponse = await cloudinary.uploader.upload(avatar);
+        const dx = uploadResponse.secure_url
+        user.avatar = dx;
+        res.status(201).status({ message: "avatar has been set" });
     } catch (error) {
         console.error(error);
     }
 }
-module.exports = {getUser,getUsers,deleteUser,updateUser,setProfile}; 
+const deleteUser = async (req, res) => {
+    try {
+        await User.findByIdAndDelete(req.params.id);
+        res.status(201).json({ message: "user is deleted..." });
+    } catch (error) {
+        console.error(error);
+    }
+}
+module.exports = { getUser, getUsers, deleteUser, updateUser, setProfile }; 
