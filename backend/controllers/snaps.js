@@ -5,16 +5,15 @@ const createSnap = async (req, res) => {
     try {
 
         const postId = req.params.id;
+        const {text}  =req.body;
         const { image } = req.body;
 
         if (!image) {
-            return res.status(400).json({ message: "Profile pic is required" });
+            return res.status(400).json({ message: "image pic is required" });
         }
         const uploadResponse = await cloudinary.uploader.upload(image);
         const dx = uploadResponse.secure_url
-        const newsnap = new Snap({ image: dx });
-
-
+        const newsnap = new Snap({text, image: dx });
         const savedSnap = await newsnap.save();
         try {
             await Post.findByIdAndUpdate(postId, {
@@ -36,4 +35,4 @@ const getsnap = async (req, res) => {
         console.error(error);
     }
 }
-module.exports = { createSnap, getsnap };
+module.exports = { createSnap,getsnap };
