@@ -23,7 +23,7 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Auth Buttons - Desktop */}
+      
         <div className="auth-buttons">
           <Link to="/login" className="auth-link login-link">
             Login
