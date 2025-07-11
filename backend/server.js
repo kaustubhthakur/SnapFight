@@ -11,9 +11,9 @@ const userrouter = require('./routes/users')
 const postrouter = require('./routes/posts')
 const snaprouter = require('./routes/snap')
 const limiter = rateLimit({
-    windowMs: 8 * 60 * 1000,
-    max: 100,
-    message: "Too many requests from this IP, please try again after 8 minutes",
+    windowMs: 10 * 60 * 1000,
+    max: 50,
+    message: "Too many requests from this IP, please try again after 10 minutes",
 });
 
 app.use(limiter)
@@ -38,6 +38,7 @@ app.use('/auth', authrouter);
 app.use('/users', userrouter);
 app.use('/posts', postrouter);
 app.use('/snaps', snaprouter);
+
 app.listen(port, () => {
     console.log(`server is running on port ${port}...`)
 })
