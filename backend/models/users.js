@@ -17,4 +17,13 @@ const createUser = async (req, res) => {
         console.error(error)
     }
 }
+const getUser = async(req,res)=>{
+    try {
+        const {userId} = req.body;
+        const query = `
+        `
+    } catch (error) {
+        console.log(error);
+    }
+}
 module.exports = { createUser }
